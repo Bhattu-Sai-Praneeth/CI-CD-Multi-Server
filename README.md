@@ -1,20 +1,5 @@
-# Tomcat Installation and Configuration using Ansible
+# CI-CD-Multi-Server Configuration using Ansible
 
----
-
-## Table of Contents
-1. Introduction
-2. Prerequisites
-3. Directory Structure
-4. Ansible Playbook for Tomcat Setup
-5. Configuration Files
-   - tomcat-users.xml
-   - context.xml
-6. Step-by-Step Instructions
-7. Optional Notes and Best Practices
-8. Starting and Verifying Tomcat
-
----
 
 ## 1. Introduction
 This document explains how to install Apache Tomcat 10.1.45 on remote Linux machines using Ansible, deploy configuration files (`tomcat-users.xml` and `context.xml`) via Ansible templates, and configure the Tomcat Manager application.
@@ -42,58 +27,9 @@ Place your playbook and configuration files in a single directory as shown:
 ├── sh.sh                  # optional helper script
 ```
 
-> Note: We are using the local copy of XML files and not `.j2` templates with variables for simplicity.
 
----
 
-## 4. Ansible Playbook for Tomcat Setup
-
-```yaml
----
-- name: Tomcat Setup
-  hosts: all
-  become: yes
-  vars:
-    tomcat_install_dir: /root/tomcat   # Change if needed
-
-  tasks:
-
-    - name: Download Tomcat from URL
-      get_url:
-        url: https://downloads.apache.org/tomcat/tomcat-10/v10.1.45/bin/apache-tomcat-10.1.45.tar.gz
-        dest: /root/
-
-    - name: Extract Tomcat
-      command: tar -xzf /root/apache-tomcat-10.1.45.tar.gz -C /root/
-
-    - name: Rename the Tomcat folder
-      command: mv /root/apache-tomcat-10.1.45 /root/tomcat
-
-    - name: Install Java (OpenJDK)
-      yum:
-        name: java-17-amazon-corretto
-        state: present
-
-    # ------------------------------
-    # Tomcat Configuration
-    # ------------------------------
-
-    - name: Deploy tomcat-users.xml
-      template:
-        src: tomcat-users.xml
-        dest: "{{ tomcat_install_dir }}/conf/tomcat-users.xml"
-
-    - name: Deploy context.xml for Manager
-      template:
-        src: context.xml
-        dest: "{{ tomcat_install_dir }}/webapps/manager/META-INF/context.xml"
-```
-
-> Note: `template` module works with local files if you are not using `.j2` variables.
-
----
-
-## 5. Configuration Files
+## 4. Configuration Files
 
 ### tomcat-users.xml
 ```xml
@@ -122,7 +58,7 @@ Place your playbook and configuration files in a single directory as shown:
 
 ---
 
-## 6. Step-by-Step Instructions
+## 5. Step-by-Step Instructions
 1. Place `tomcat.yml`, `tomcat-users.xml`, and `context.xml` in the same directory.
 2. Run the playbook:
    ```bash
@@ -133,7 +69,7 @@ Place your playbook and configuration files in a single directory as shown:
 
 ---
 
-## 7. Optional Notes and Best Practices
+## 6. Optional Notes and Best Practices
 - **File Permissions:** By default, the files are copied with the user running Ansible. For production, you may want to set `owner`, `group`, and `mode`.
 - **Using `.j2` Templates:** If you want dynamic usernames, passwords, or variables, rename files to `.j2` and use `{{ variable_name }}` placeholders.
 - **Security:** Change default credentials (`sai/sai`) for production environments.
@@ -141,7 +77,7 @@ Place your playbook and configuration files in a single directory as shown:
 
 ---
 
-## 8. Starting and Verifying Tomcat
+## 7. Starting and Verifying Tomcat
 1. Start Tomcat manually:
 ```bash
 cd /root/tomcat/bin
@@ -166,5 +102,4 @@ Login using `sai` / `sai` credentials.
 
 ---
 
-**End of Documentation**
 
