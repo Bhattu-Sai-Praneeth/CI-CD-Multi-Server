@@ -1,0 +1,8 @@
+---
+- name: deploy to all the files
+  hosts: all
+  tasks:
+    - name: copying to remote servers
+      copy:
+        src: /var/lib/jenkins/workspace/project/target/myapp.war
+        dest: /root/tomcat/webapps

@@ -1,0 +1,31 @@
+---
+- name: Tomcat Setup
+  hosts: all
+  become: yes
+  vars:
+    tomcat_install_dir: /root/tomcat   # Change this if your Tomcat path is different
+
+  tasks:
+
+    - name: Download Tomcat from URL
+      get_url:
+        url: https://downloads.apache.org/tomcat/tomcat-10/v10.1.45/bin/apache-tomcat-10.1.45.tar.gz
+        dest: /root/
+
+    - name: Extract Tomcat
+      command: tar -xzf /root/apache-tomcat-10.1.45.tar.gz -C /root/
+
+    - name: Rename the Tomcat folder
+      command: mv /root/apache-tomcat-10.1.45 /root/tomcat
+
+    - name: Install Java (OpenJDK)
+      yum:
+        name: java-17-amazon-corretto
+        state: present
+
+    # ------------------------------
+    # Tomcat Configuration using local XML files
+    # ------------------------------
+
+    - name: Deploy tomcat-users.xml
+                                             

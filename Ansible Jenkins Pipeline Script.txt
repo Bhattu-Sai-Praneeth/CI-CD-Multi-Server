@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('GITHUB CHECKOUT') {
+            steps {
+                git url: 'https://github.com/Bhattu-Sai-Praneeth/java-project-maven-new.git'
+            }
+        }
+        stage('MAVEN COMPILE'){
+            steps{
+                sh 'mvn compile'
+            }
+        }
+        stage('MAVEN TEST'){
+            steps{
+                sh 'mvn test'
+            }
+        }
+        stage('MAVEN PACKAGE'){
+            steps{
+                sh 'mvn package'
+            }
+        }
+        stage('DEPLOY USING ANSIBLE'){
+            steps{
+                ansiblePlaybook credentialsId: 'linuxcreds', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: '/etc/ansible/deploy.yml', vaultTmpPath: ''
+            }
+        }
+    }
+}
