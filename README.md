@@ -1,6 +1,11 @@
 # CI-CD-Multi-Server Configuration using Ansible
 
 
+![Pipeline Diagram](https://raw.githubusercontent.com/Bhattu-Sai-Praneeth/CI-CD-Multi-Server/main/Pipeline.png)
+
+*Figure: CI/CD architecture—GitHub → Jenkins → SonarQube & Artifact Repo → Ansible → Target Servers → End Users*
+
+
 ## 1. Introduction
 This document explains how to install Apache Tomcat 10.1.45 on remote Linux machines using Ansible, deploy configuration files (`tomcat-users.xml` and `context.xml`) via Ansible templates, and configure the Tomcat Manager application.
 
